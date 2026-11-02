@@ -1,0 +1,27 @@
+# Target: Adafruit Feather ESP32 V2 (ESP32 / Xtensa)
+[build]
+target = "xtensa-esp32-espidf"
+
+[target.xtensa-esp32-espidf]
+linker = "ldproxy"
+rustflags = ["--cfg", "espidf_time64"]
+# `cargo run` flashes the connected board and starts monitoring
+runner = "espflash flash --monitor"
+
+[unstable]
+build-std = ["std", "panic_abort"]
+
+[env]
+MCU = "esp32"
+# Never download tooling/ESP-IDF at cargo-build time; the environment
+# (nix dev shell or nix build) provides IDF_PATH + all tools on PATH.
+ESP_IDF_TOOLS_INSTALL_DIR = "fromenv"
+# The component manager would try to access the network; we have no
+# remote components.
+IDF_COMPONENT_MANAGER = "0"
+ESP_IDF_COMPONENT_MANAGER = "off"
+# The workspace root is virtual (no root package), so esp-idf-sys cannot
+# detect which crate's package.metadata to read. Point it at
+# firmware-start; its direct dependency firmware-common carries the
+# extra_components metadata (the vendored esp32-camera driver).
+ESP_IDF_SYS_ROOT_CRATE = "firmware-start"

@@ -1,0 +1,20 @@
+# Rust main() runs on the ESP-IDF main task; the default stack (3584 bytes)
+# is too small for Rust.
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=8192
+
+# OpenCores Ethernet MAC, used as the link layer when running under QEMU
+# (which does not emulate WiFi). Harmless on real hardware.
+CONFIG_ETH_USE_OPENETH=y
+
+# The Feather ESP32 V2 has 8MB of flash; matches the QEMU image size.
+CONFIG_ESPTOOLPY_FLASHSIZE_8MB=y
+
+# BLE score sync on the start node (firmware_common::scores): NimBLE host
+# with a BLE-only controller. Harmless for the end node and QEMU builds;
+# the BT controller is never enabled there.
+CONFIG_BT_ENABLED=y
+CONFIG_BTDM_CTRL_MODE_BLE_ONLY=y
+CONFIG_BTDM_CTRL_MODE_BR_EDR_ONLY=n
+CONFIG_BTDM_CTRL_MODE_BTDM=n
+CONFIG_BT_NIMBLE_ENABLED=y
+CONFIG_BT_NIMBLE_MAX_CONNECTIONS=1

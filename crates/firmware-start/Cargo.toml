@@ -1,0 +1,24 @@
+[package]
+name = "firmware-start"
+version = "0.1.0"
+edition = "2021"
+license = "GPL-3.0"
+
+[dependencies]
+esp-idf-svc = { version = "0.53", default-features = false, features = [
+  "std",
+  "binstart",
+] }
+# `usb`: UART QR/barcode scanner for player ID on the start node.
+firmware-common = { path = "../firmware-common", features = ["usb"] }
+timer-protocol = { path = "../timer-protocol" }
+log = "0.4"
+# Display driver deps live in firmware-common (display module).
+
+[features]
+qemu = ["firmware-common/qemu"]
+# Player ID via onboard camera instead of the UART QR/barcode scanner.
+camera = ["firmware-common/camera"]
+
+[build-dependencies]
+embuild = "0.33"

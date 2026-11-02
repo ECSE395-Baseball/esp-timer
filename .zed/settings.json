@@ -1,0 +1,23 @@
+// Zed's rust-analyzer session does not apply the workspace
+// rust-analyzer.toml, so cargo features are mirrored here via LSP
+// initialization options. KEEP IN SYNC with /rust-analyzer.toml, which
+// remains the canonical toggle for other editors and CLI runs.
+//
+// Presets:
+//   QEMU emulation: ["firmware-common/qemu", "firmware-start/qemu", "firmware-end/qemu"]
+//   Camera QR:      ["firmware-common/camera", "firmware-start/camera"]
+//   Neither:        []
+{
+  "lsp": {
+    "rust-analyzer": {
+      "initialization_options": {
+        "cargo": {
+          "features": [
+            "firmware-common/camera",
+            "firmware-start/camera",
+          ]
+        }
+      }
+    }
+  }
+}

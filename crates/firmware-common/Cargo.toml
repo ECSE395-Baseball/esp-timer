@@ -1,0 +1,42 @@
+[package]
+name = "firmware-common"
+version = "0.1.0"
+edition = "2021"
+license = "GPL-3.0"
+
+[dependencies]
+esp-idf-svc = { version = "0.53", default-features = false, features = [
+  "std",
+  "binstart",
+  "critical-section",
+] }
+timer-protocol = { path = "../timer-protocol" }
+# Xtensa LX6 has no native 64-bit atomics; these use ESP-IDF critical
+# sections instead.
+portable-atomic = { version = "1", features = ["critical-section"] }
+log = "0.4"
+# SSD1306 OLED (display module; start node only).
+ssd1306 = "0.9"
+embedded-graphics = "0.8"
+# Pure-Rust QR decoder
+rqrr = { version = "0.8", default-features = false, optional = true }
+esp32-nimble = "0.13.0"
+
+[features]
+# Build for Espressif's QEMU fork: raw Ethernet frames over the emulated
+# OpenCores MAC instead of ESP-NOW (WiFi is not emulated), and a scheduled
+# virtual trigger instead of the GPIO button.
+qemu = []
+# UART-attached QR/barcode scanner for player ID (start node).
+usb = []
+# Onboard-camera QR reader for player ID (start node).
+camera = ["dep:rqrr"]
+
+# esp32-camera v2.0.15
+[[package.metadata.esp-idf-sys.extra_components]]
+component_dirs = ["components/esp32-camera"]
+bindings_header = "components/camera_bindings.h"
+bindings_module = "camera"
+
+[build-dependencies]
+embuild = "0.33"
