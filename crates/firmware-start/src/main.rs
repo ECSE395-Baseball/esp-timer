@@ -129,7 +129,7 @@ fn main() {
     // Trigger input: BOOT button (to ground when pressed) on hardware,
     // scheduled virtual trigger under QEMU.
     #[cfg(not(feature = "qemu"))]
-    let trigger = Trigger::on_falling_edge(board.trigger).expect("trigger setup failed");
+    let mut trigger = Trigger::on_falling_edge(board.trigger).expect("trigger setup failed");
     #[cfg(feature = "qemu")]
     let trigger = Trigger::new_virtual();
 
@@ -241,8 +241,6 @@ fn main() {
                 for _ in 0..EVENT_REPEATS {
                     link.broadcast(&Message::StartEvent { t_start_us });
                 }
-                #[cfg(not(feature = "qemu"))]
-                led.set_high().unwrap();
                 let State::Countdown { player, .. } = state else {
                     unreachable!()
                 };
@@ -293,6 +291,15 @@ fn main() {
             }
             Err(std::sync::mpsc::RecvTimeoutError::Timeout) => {}
             Err(std::sync::mpsc::RecvTimeoutError::Disconnected) => unreachable!(),
+        }
+
+        // On-board red LED: on while a measurement is running. Re-asserted
+        // from state every pass (same pattern as the end node), so the LED
+        // always follows state transitions wherever they happen above.
+        #[cfg(not(feature = "qemu"))]
+        match state {
+            State::Running { .. } => led.set_high().unwrap(),
+            _ => led.set_low().unwrap(),
         }
 
         #[cfg(feature = "qemu")]

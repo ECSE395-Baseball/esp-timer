@@ -2,6 +2,11 @@
 # is too small for Rust.
 CONFIG_ESP_MAIN_TASK_STACK_SIZE=8192
 
+# 1 kHz tick so sub-tick sleeps (e.g. the pressure sensor's 1 ms poll via
+# std::thread::sleep -> usleep) block with vTaskDelay instead of busy-waiting
+# in ets_delay_us, which starves the idle task and trips the task watchdog.
+CONFIG_FREERTOS_HZ=1000
+
 # OpenCores Ethernet MAC, used as the link layer when running under QEMU
 # (which does not emulate WiFi). Harmless on real hardware.
 CONFIG_ETH_USE_OPENETH=y

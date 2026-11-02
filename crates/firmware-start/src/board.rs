@@ -8,7 +8,7 @@
 #[cfg(all(not(feature = "qemu"), not(feature = "camera")))]
 use esp_idf_svc::hal::gpio::Gpio26;
 #[cfg(not(feature = "qemu"))]
-use esp_idf_svc::hal::gpio::{Gpio0, Gpio13, Gpio16, Gpio20, Gpio22};
+use esp_idf_svc::hal::gpio::{Gpio13, Gpio20, Gpio22, Gpio25, Gpio38};
 #[cfg(not(feature = "qemu"))]
 use esp_idf_svc::hal::i2c::I2C0;
 #[cfg(not(feature = "qemu"))]
@@ -39,9 +39,10 @@ pub struct Board {
     /// Unused in camera builds (the camera replaces the scanner).
     #[cfg(all(not(feature = "qemu"), not(feature = "camera")))]
     pub scanner_uart: UART1<'static>,
-    /// Start trigger: the BOOT button (to ground when pressed).
+    /// Start trigger: the SW38 user button (to ground when pressed;
+    /// input-only pin, pull-up on board).
     #[cfg(not(feature = "qemu"))]
-    pub trigger: Gpio0<'static>,
+    pub trigger: Gpio38<'static>,
     /// Onboard red LED: on while a measurement is running.
     #[cfg(not(feature = "qemu"))]
     pub led: Gpio13<'static>,
@@ -60,10 +61,10 @@ pub struct Board {
     pub buzzer_timer: TIMER0<'static>,
     #[cfg(not(feature = "qemu"))]
     pub buzzer_channel: CHANNEL0<'static>,
-    /// Buzzer pin. GPIO16 is free in both scanner and camera builds (the
+    /// Buzzer pin. GPIO25 is free in both scanner and camera builds (the
     /// old prototype's buzzer pin A0/GPIO26 is the scanner RX here).
     #[cfg(not(feature = "qemu"))]
-    pub buzzer: Gpio16<'static>,
+    pub buzzer: Gpio25<'static>,
 }
 
 /// Consume the raw peripherals and produce the function-named board map.
@@ -84,7 +85,7 @@ pub fn take(p: Peripherals) -> Board {
         #[cfg(all(not(feature = "qemu"), not(feature = "camera")))]
         scanner_uart: p.uart1,
         #[cfg(not(feature = "qemu"))]
-        trigger: p.pins.gpio0,
+        trigger: p.pins.gpio38,
         #[cfg(not(feature = "qemu"))]
         led: p.pins.gpio13,
         #[cfg(not(feature = "qemu"))]
@@ -98,7 +99,7 @@ pub fn take(p: Peripherals) -> Board {
         #[cfg(not(feature = "qemu"))]
         buzzer_channel: p.ledc.channel0,
         #[cfg(not(feature = "qemu"))]
-        buzzer: p.pins.gpio16,
+        buzzer: p.pins.gpio25,
     }
 }
 

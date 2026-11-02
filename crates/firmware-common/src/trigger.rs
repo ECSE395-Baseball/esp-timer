@@ -26,9 +26,13 @@ static VIRTUAL_TRIGGER_AT_US: AtomicI64 = AtomicI64::new(-1);
 /// The `Trigger` handle must be kept alive for the interrupt to stay
 /// subscribed. Each instance owns its timestamp cell, so triggers on
 /// different pins are independent (no shared global state).
+///
+/// esp-idf-hal disables the pin's interrupt after every trigger (its
+/// `handle_isr` calls `gpio_intr_disable`), so [`Trigger::take`] re-arms
+/// it; without that the trigger would fire exactly once per boot.
 #[cfg(not(feature = "qemu"))]
 pub struct Trigger {
-    _pin: esp_idf_svc::hal::gpio::PinDriver<'static, esp_idf_svc::hal::gpio::Input>,
+    pin: esp_idf_svc::hal::gpio::PinDriver<'static, esp_idf_svc::hal::gpio::Input>,
     fired_at: &'static AtomicI64,
 }
 
@@ -75,17 +79,22 @@ impl Trigger {
             })?;
         }
         pin.enable_interrupt()?;
-        Ok(Self {
-            _pin: pin,
-            fired_at,
-        })
+        Ok(Self { pin, fired_at })
     }
 
     /// Take the pending trigger timestamp (us), if any.
-    pub fn take(&self) -> Option<u64> {
+    ///
+    /// Re-arms the pin interrupt after a consumed event: esp-idf-hal disables
+    /// it on every trigger, and it must be re-enabled from a non-ISR context
+    pub fn take(&mut self) -> Option<u64> {
         match self.fired_at.swap(-1, Ordering::Relaxed) {
             -1 => None,
-            t => Some(t as u64),
+            t => {
+                if let Err(e) = self.pin.enable_interrupt() {
+                    log::warn!("trigger re-arm failed: {e}");
+                }
+                Some(t as u64)
+            }
         }
     }
 }
