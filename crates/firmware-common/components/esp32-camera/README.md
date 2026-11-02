@@ -1,9 +1,13 @@
 # ESP32 Camera Driver
 
-[![Build examples](https://github.com/espressif/esp32-camera/actions/workflows/build.yml/badge.svg)](https://github.com/espressif/esp32-camera/actions/workflows/build.yml) [![Component Registry](https://components.espressif.com/components/espressif/esp32-camera/badge.svg)](https://components.espressif.com/components/espressif/esp32-camera)
+[![Build examples](https://github.com/espressif/esp32-camera/actions/workflows/build.yml/badge.svg)](https://github.com/espressif/esp32-camera/actions/workflows/build.yml)
+[![Component Registry](https://components.espressif.com/components/espressif/esp32-camera/badge.svg)](https://components.espressif.com/components/espressif/esp32-camera)
+
 ## General Information
 
-This repository hosts ESP32 series Soc compatible driver for image sensors. Additionally it provides a few tools, which allow converting the captured frame data to the more common BMP and JPEG formats.
+This repository hosts ESP32 series Soc compatible driver for image sensors. Additionally
+it provides a few tools, which allow converting the captured frame data to the more
+common BMP and JPEG formats.
 
 ### Supported Soc
 
@@ -13,32 +17,40 @@ This repository hosts ESP32 series Soc compatible driver for image sensors. Addi
 
 ### Supported Sensor
 
-| model   | max resolution | color type | output format                                                | Len Size |
-| ------- | -------------- | ---------- | ------------------------------------------------------------ | -------- |
-| OV2640  | 1600 x 1200    | color      | YUV(422/420)/YCbCr422<br>RGB565/555<br>8-bit compressed data<br>8/10-bit Raw RGB data | 1/4"     |
-| OV3660  | 2048 x 1536    | color      | raw RGB data<br/>RGB565/555/444<br/>CCIR656<br/>YCbCr422<br/>compression | 1/5"     |
-| OV5640  | 2592 x 1944    | color      | RAW RGB<br/>RGB565/555/444<br/>CCIR656<br/>YUV422/420<br/>YCbCr422<br/>compression | 1/4"     |
-| OV7670  | 640 x 480      | color      | Raw Bayer RGB<br/>Processed Bayer RGB<br>YUV/YCbCr422<br>GRB422<br>RGB565/555 | 1/6"     |
-| OV7725  | 640 x 480      | color      | Raw RGB<br/>GRB 422<br/>RGB565/555/444<br/>YCbCr 422         | 1/4"     |
-| NT99141 | 1280 x 720     | color      | YCbCr 422<br/>RGB565/555/444<br/>Raw<br/>CCIR656<br/>JPEG compression | 1/4"     |
-| GC032A  | 640 x 480      | color      | YUV/YCbCr422<br/>RAW Bayer<br/>RGB565                        | 1/10"    |
-| GC0308  | 640 x 480      | color      | YUV/YCbCr422<br/>RAW Bayer<br/>RGB565<br/>Grayscale                         | 1/6.5"   |
-| GC2145  | 1600 x 1200    | color      | YUV/YCbCr422<br/>RAW Bayer<br/>RGB565                        | 1/5"     |
-| BF3005  | 640 x 480      | color      | YUV/YCbCr422<br/>RAW Bayer<br/>RGB565                        | 1/4"     |
-| BF20A6  | 640 x 480      | color      | YUV/YCbCr422<br/>RAW Bayer<br/>Only Y                        | 1/10"    |
-| SC101IOT| 1280 x 720     | color      | YUV/YCbCr422<br/>Raw RGB                                     | 1/4.2"   |
-| SC030IOT| 640 x 480      | color      | YUV/YCbCr422<br/>RAW Bayer                                   | 1/6.5"   |
-| SC031GS | 640 x 480      | monochrome | RAW MONO<br/>Grayscale                                       | 1/6"     |
+| model    | max resolution | color type | output format                                                                         | Len Size |
+| -------- | -------------- | ---------- | ------------------------------------------------------------------------------------- | -------- |
+| OV2640   | 1600 x 1200    | color      | YUV(422/420)/YCbCr422<br>RGB565/555<br>8-bit compressed data<br>8/10-bit Raw RGB data | 1/4"     |
+| OV3660   | 2048 x 1536    | color      | raw RGB data<br/>RGB565/555/444<br/>CCIR656<br/>YCbCr422<br/>compression              | 1/5"     |
+| OV5640   | 2592 x 1944    | color      | RAW RGB<br/>RGB565/555/444<br/>CCIR656<br/>YUV422/420<br/>YCbCr422<br/>compression    | 1/4"     |
+| OV7670   | 640 x 480      | color      | Raw Bayer RGB<br/>Processed Bayer RGB<br>YUV/YCbCr422<br>GRB422<br>RGB565/555         | 1/6"     |
+| OV7725   | 640 x 480      | color      | Raw RGB<br/>GRB 422<br/>RGB565/555/444<br/>YCbCr 422                                  | 1/4"     |
+| NT99141  | 1280 x 720     | color      | YCbCr 422<br/>RGB565/555/444<br/>Raw<br/>CCIR656<br/>JPEG compression                 | 1/4"     |
+| GC032A   | 640 x 480      | color      | YUV/YCbCr422<br/>RAW Bayer<br/>RGB565                                                 | 1/10"    |
+| GC0308   | 640 x 480      | color      | YUV/YCbCr422<br/>RAW Bayer<br/>RGB565<br/>Grayscale                                   | 1/6.5"   |
+| GC2145   | 1600 x 1200    | color      | YUV/YCbCr422<br/>RAW Bayer<br/>RGB565                                                 | 1/5"     |
+| BF3005   | 640 x 480      | color      | YUV/YCbCr422<br/>RAW Bayer<br/>RGB565                                                 | 1/4"     |
+| BF20A6   | 640 x 480      | color      | YUV/YCbCr422<br/>RAW Bayer<br/>Only Y                                                 | 1/10"    |
+| SC101IOT | 1280 x 720     | color      | YUV/YCbCr422<br/>Raw RGB                                                              | 1/4.2"   |
+| SC030IOT | 640 x 480      | color      | YUV/YCbCr422<br/>RAW Bayer                                                            | 1/6.5"   |
+| SC031GS  | 640 x 480      | monochrome | RAW MONO<br/>Grayscale                                                                | 1/6"     |
 
 ## Important to Remember
 
-- Except when using CIF or lower resolution with JPEG, the driver requires PSRAM to be installed and activated.
-- Using YUV or RGB puts a lot of strain on the chip because writing to PSRAM is not particularly fast. The result is that image data might be missing. This is particularly true if WiFi is enabled. If you need RGB data, it is recommended that JPEG is captured and then turned into RGB using `fmt2rgb888` or `fmt2bmp`/`frame2bmp`.
-- When 1 frame buffer is used, the driver will wait for the current frame to finish (VSYNC) and start I2S DMA. After the frame is acquired, I2S will be stopped and the frame buffer returned to the application. This approach gives more control over the system, but results in longer time to get the frame.
-- When 2 or more frame bufers are used, I2S is running in continuous mode and each frame is pushed to a queue that the application can access. This approach puts more strain on the CPU/Memory, but allows for double the frame rate. Please use only with JPEG.
+- Except when using CIF or lower resolution with JPEG, the driver requires PSRAM to be
+  installed and activated.
+- Using YUV or RGB puts a lot of strain on the chip because writing to PSRAM is not
+  particularly fast. The result is that image data might be missing. This is
+  particularly true if WiFi is enabled. If you need RGB data, it is recommended that
+  JPEG is captured and then turned into RGB using `fmt2rgb888` or `fmt2bmp`/`frame2bmp`.
+- When 1 frame buffer is used, the driver will wait for the current frame to finish
+  (VSYNC) and start I2S DMA. After the frame is acquired, I2S will be stopped and the
+  frame buffer returned to the application. This approach gives more control over the
+  system, but results in longer time to get the frame.
+- When 2 or more frame bufers are used, I2S is running in continuous mode and each frame
+  is pushed to a queue that the application can access. This approach puts more strain
+  on the CPU/Memory, but allows for double the frame rate. Please use only with JPEG.
 
 ## Installation Instructions
-
 
 ### Using with ESP-IDF
 
@@ -56,7 +68,8 @@ These instructions also work for PlatformIO, if you are using `framework=espidf`
 
 #### Arduino IDE
 
-If you are using the arduino-esp32 core in Arduino IDE, no installation is needed! You can use esp32-camera right away.
+If you are using the arduino-esp32 core in Arduino IDE, no installation is needed! You
+can use esp32-camera right away.
 
 #### PlatformIO
 
@@ -74,7 +87,9 @@ Now the `esp_camera.h` is available to be included:
 #include "esp_camera.h"
 ```
 
-Enable PSRAM on `menuconfig` or type it direclty on `sdkconfig`. Check the [official doc](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/kconfig.html#config-esp32-spiram-support) for more info.
+Enable PSRAM on `menuconfig` or type it direclty on `sdkconfig`. Check the
+[official doc](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/kconfig.html#config-esp32-spiram-support)
+for more info.
 
 ```
 CONFIG_ESP32_SPIRAM_SUPPORT=y
@@ -82,13 +97,15 @@ CONFIG_ESP32_SPIRAM_SUPPORT=y
 
 ## Examples
 
-This component comes with a basic example illustrating how to get frames from the camera. You can try out the example using the following command:
+This component comes with a basic example illustrating how to get frames from the
+camera. You can try out the example using the following command:
 
 ```
 idf.py create-project-from-example "espressif/esp32-camera:camera_example"
 ```
 
-This command will download the example into `camera_example` directory. It comes already pre-configured with the correct settings in menuconfig.
+This command will download the example into `camera_example` directory. It comes already
+pre-configured with the correct settings in menuconfig.
 
 ### Initialization
 
@@ -354,6 +371,3 @@ esp_err_t bmp_httpd_handler(httpd_req_t *req){
     return res;
 }
 ```
-
-
-
