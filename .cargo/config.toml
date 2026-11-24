@@ -1,0 +1,25 @@
+[build]
+target = "xtensa-esp32s3-espidf"
+
+[target.xtensa-esp32-espidf]
+linker = "ldproxy"
+rustflags = ["--cfg", "espidf_time64"]
+runner = "espflash flash --monitor"
+
+[target.xtensa-esp32s3-espidf]
+linker = "ldproxy"
+rustflags = ["--cfg", "espidf_time64"]
+runner = "espflash flash --monitor"
+
+[unstable]
+build-std = ["std", "panic_abort"]
+
+[env]
+MCU = "esp32s3"
+# Never download tooling/ESP-IDF at cargo-build time
+ESP_IDF_TOOLS_INSTALL_DIR = "fromenv"
+# Turn off internet
+IDF_COMPONENT_MANAGER = "0"
+ESP_IDF_COMPONENT_MANAGER = "off"
+# virtua root: use firmware-start by default
+ESP_IDF_SYS_ROOT_CRATE = "firmware-start"

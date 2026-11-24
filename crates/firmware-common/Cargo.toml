@@ -1,0 +1,61 @@
+[package]
+name = "firmware-common"
+version = "0.1.0"
+edition = "2021"
+license = "GPL-3.0"
+
+[dependencies]
+esp-idf-svc = { version = "0.53", default-features = false, features = [
+  "std",
+  "binstart",
+  "critical-section",
+] }
+timer-protocol = { path = "../timer-protocol" }
+# Xtensa LX6 has no native 64-bit atomics; these use ESP-IDF critical
+# sections instead.
+portable-atomic = { version = "1", features = ["critical-section"] }
+log = "0.4"
+# SSD1306 OLED (display module; start node only).
+ssd1306 = "0.9"
+embedded-graphics = "0.8"
+# ST7789 onboard TFT of the Feather TFT ESP32-S3 (display module,
+# `tft-display` feature; start node only).
+mipidsi = { version = "0.9", optional = true }
+# Pure-Rust QR decoder
+rqrr = { path = "../rqrr", default-features = false, optional = true }
+esp32-nimble = "0.13.0"
+
+[features]
+# Build for Espressif's QEMU fork: raw Ethernet frames over the emulated
+# OpenCores MAC instead of ESP-NOW (WiFi is not emulated), and a scheduled
+# virtual trigger instead of the GPIO button.
+qemu = []
+# USB HID keyboard-wedge barcode scanner (JRHC 710T) for player ID on the
+# start node, via the ESP32-S3's native USB host peripheral. Compiles to a
+# no-op stub on plain esp32 (no USB host hardware) and to a scripted mock
+# in qemu builds.
+usb = []
+# Onboard-camera QR reader for player ID (start node).
+camera = ["dep:rqrr"]
+# Use the Feather TFT ESP32-S3's onboard 240x135 ST7789 as the start
+# node's screen instead of the external SSD1306 OLED. ESP32-S3 only; the
+# OLED remains the default when the feature is off.
+tft-display = ["dep:mipidsi"]
+
+# esp32-camera v2.0.15
+[[package.metadata.esp-idf-sys.extra_components]]
+component_dirs = ["components/esp32-camera"]
+bindings_header = "components/camera_bindings.h"
+bindings_module = "camera"
+
+# espressif/usb_host_hid v1.2.1 (USB host HID class driver; keyboard-wedge
+# barcode scanner). The component lives nested in the esp-usb monorepo
+# submodule (components/esp-usb, pinned to 7d94311); the thin wrapper at
+# components/usb_host_hid registers it only on USB-OTG-capable targets.
+[[package.metadata.esp-idf-sys.extra_components]]
+component_dirs = ["components/usb_host_hid"]
+bindings_header = "components/hid_bindings.h"
+bindings_module = "usbhid"
+
+[build-dependencies]
+embuild = "0.33"

@@ -1,0 +1,20 @@
+[package]
+name = "firmware-end"
+version = "0.1.0"
+edition = "2021"
+license = "GPL-3.0"
+
+[dependencies]
+esp-idf-svc = { version = "0.53", default-features = false, features = [
+  "std",
+  "binstart",
+] }
+firmware-common = { path = "../firmware-common" }
+timer-protocol = { path = "../timer-protocol" }
+log = "0.4"
+
+[features]
+qemu = ["firmware-common/qemu"]
+
+[build-dependencies]
+embuild = "0.33"

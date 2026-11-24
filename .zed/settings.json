@@ -1,0 +1,14 @@
+{
+  "lsp": {
+    "rust-analyzer": {
+      "initialization_options": {
+        "cargo": {
+          "features": [
+            "firmware-common/camera",
+            "firmware-start/camera",
+          ]
+        }
+      }
+    }
+  }
+}

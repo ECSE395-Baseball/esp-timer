@@ -1,0 +1,6 @@
+[submodule "crates/firmware-common/components/esp-usb"]
+	path = crates/firmware-common/components/esp-usb
+	url = https://github.com/espressif/esp-usb.git
+[submodule "crates/firmware-common/components/esp32-camera"]
+	path = crates/firmware-common/components/esp32-camera
+	url = https://github.com/espressif/esp32-camera.git

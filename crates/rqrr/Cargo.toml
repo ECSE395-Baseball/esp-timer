@@ -1,0 +1,16 @@
+[package]
+name = "rqrr"
+version = "0.8.0"
+edition = "2021"
+rust-version = "1.74.0"
+description = "Vendored copy of rqrr 0.8.0"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/WanzenBug/rqrr"
+
+[lib]
+name = "rqrr"
+path = "src/lib.rs"
+
+[dependencies]
+g2p = "1.0"
+lru = "0.12"

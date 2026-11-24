@@ -1,0 +1,7 @@
+# Note: cargo.features exists ONLY in rust-analyzer's workspace-level toml
+# schema — a rust-analyzer.toml inside a crate (or crates/) is parsed as
+# crate-level config, which has no cargo.features, and is rejected with
+#
+# Zed's LSP session does not apply this file, so Zed is configured separately in
+# .zed/settings.json — keep the two in sync.
+cargo.features = ["firmware-common/camera", "firmware-start/camera"]
